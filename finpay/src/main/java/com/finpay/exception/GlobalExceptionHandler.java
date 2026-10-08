@@ -2,6 +2,7 @@ package com.finpay.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -61,5 +62,31 @@ public class GlobalExceptionHandler {
                         HttpStatus.CONFLICT.value(),
                         ex.getMessage()
                 ));
+    }
+
+    @ExceptionHandler(WalletNotFoundException.class)
+    public ResponseEntity<String> handleWalletNotFound(
+            WalletNotFoundException exception) {
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(exception.getMessage());
+    }
+    @ExceptionHandler(WalletAlreadyExistsException.class)
+    public ResponseEntity<String> handleWalletAlreadyExists(
+            WalletAlreadyExistsException exception) {
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(exception.getMessage());
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<String> handleBadCredentials(
+            BadCredentialsException exception) {
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body("Invalid email or password");
     }
 }

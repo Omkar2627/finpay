@@ -9,8 +9,11 @@ import com.finpay.exception.EmailAlreadyExistsException;
 import com.finpay.exception.UserNotFoundException;
 import com.finpay.mapper.UserMapper;
 import com.finpay.repository.UserRepository;
+import com.finpay.security.SecurityUtils;
 import com.finpay.service.UserService;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,32 +26,22 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final SecurityUtils securityUtils;
+
 
 
     public UserServiceImpl(
             UserRepository userRepository,
             UserMapper userMapper,
-            PasswordEncoder passwordEncoder
+            PasswordEncoder passwordEncoder,
+             SecurityUtils securityUtils
     ) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
+        this.securityUtils = securityUtils;
     }
-    @Override
-    @Transactional
-    public UserResponse createUser(CreateUserRequest request) {
-        if(userRepository.existsByEmail(request.getEmail())){
-            throw new EmailAlreadyExistsException("Email Already Exists");
-        }
-        User user = userMapper.toEntity(request);
-        String encodedPassword = passwordEncoder.encode(request.getPassword());
 
-        user.setPassword(encodedPassword);
-
-        User savedUser = userRepository.save(user);
-
-        return userMapper.toResponse(savedUser);
-    }
 
     @Override
     @Transactional
@@ -61,56 +54,70 @@ public class UserServiceImpl implements UserService {
         return userMapper.toResponse(user);
     }
 
+
+@Override
+@Transactional
+public UserResponse updateCurrentUser(
+        UpdateUserRequest request
+) {
+
+    User user = getAuthenticatedUser();
+
+    if (request.getName() != null) {
+        user.setName(request.getName());
+    }
+
+    if (request.getEmail() != null &&
+            !request.getEmail().equals(user.getEmail())) {
+
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new EmailAlreadyExistsException(
+                    "Email already exists"
+            );
+        }
+
+        user.setEmail(request.getEmail());
+    }
+
+    if (request.getMobile() != null) {
+        user.setMobile(request.getMobile());
+    }
+
+    user.setUpdatedAt(LocalDateTime.now());
+
+    User updatedUser = userRepository.save(user);
+
+    return userMapper.toResponse(updatedUser);
+}
+
+private User getAuthenticatedUser() {
+
+    String email = securityUtils.getCurrentUserEmail();
+
+    return userRepository.findByEmail(email)
+            .orElseThrow(() ->
+                    new UserNotFoundException(
+                            "Authenticated user not found"
+                    )
+            );
+}
+
     @Override
     @Transactional
-    public UserResponse updateUser(Long Id, UpdateUserRequest request) {
+    public UserResponse getCurrentUser() {
 
-        User user = userRepository.findById(Id)
-                .orElseThrow(() ->
-                        new UserNotFoundException(
-                                "User not found with id: " + Id
-                        )
-                );
+        User user = getAuthenticatedUser();
 
-        if (request.getName() != null) {
-            user.setName(request.getName());
-        }
-
-        if (request.getEmail() != null &&
-                !request.getEmail().equals(user.getEmail())) {
-
-            if (userRepository.existsByEmail(request.getEmail())) {
-                throw new EmailAlreadyExistsException(
-                        "Email already exists"
-                );
-            }
-
-            user.setEmail(request.getEmail());
-        }
-        if (request.getMobile() != null) {
-            user.setMobile(request.getMobile());
-        }
-
-        user.setUpdatedAt(LocalDateTime.now());
-
-        User updatedUser = userRepository.save(user);
-
-        return userMapper.toResponse(updatedUser);
+        return userMapper.toResponse(user);
     }
 
     @Override
     @Transactional
-    public void changePassword(
-            Long id,
+    public void changeCurrentUserPassword(
             ChangePasswordRequest request
     ) {
 
-        User user = userRepository.findById(id)
-                .orElseThrow(() ->
-                        new UserNotFoundException(
-                                "User not found with id: " + id
-                        )
-                );
+        User user = getAuthenticatedUser();
 
         boolean currentPasswordMatches =
                 passwordEncoder.matches(

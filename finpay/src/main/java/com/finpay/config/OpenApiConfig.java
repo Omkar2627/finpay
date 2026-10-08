@@ -1,7 +1,9 @@
 package com.finpay.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
@@ -9,8 +11,14 @@ import org.springframework.context.annotation.Configuration;
         info = @Info(
                 title = "FinPay API",
                 version = "1.0",
-                description = "Digital wallet and payment system API"
+                description = "Digital Wallet And Payment System API"
         )
+)
+@SecurityScheme(
+        name = "bearerAuth",
+        type = SecuritySchemeType.HTTP,
+        scheme = "bearer",
+        bearerFormat = "JWT"
 )
 public class OpenApiConfig {
 }
