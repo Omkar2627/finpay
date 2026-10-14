@@ -54,12 +54,6 @@ public class TransactionServiceImpl implements TransactionService {
         }
         return transactionMapper.toResponse(transaction);
     }
-//
-//    private User getAuthenticatedUser() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String email = authentication.getName();
-//        return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(" Authenticated user not found"));
-//    }
 
     private User getAuthenticatedUser() {
         Authentication authentication =
