@@ -23,6 +23,7 @@ public class GlobalExceptionHandler {
         response.put("message", message);
         return response;
     }
+
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<?> handleUserNotFound(
             UserNotFoundException ex
@@ -52,6 +53,7 @@ public class GlobalExceptionHandler {
                 .badRequest()
                 .body(errors);
     }
+
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public ResponseEntity<?> handleEmailAlreadyExists(
             EmailAlreadyExistsException ex
@@ -72,6 +74,7 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(exception.getMessage());
     }
+
     @ExceptionHandler(WalletAlreadyExistsException.class)
     public ResponseEntity<String> handleWalletAlreadyExists(
             WalletAlreadyExistsException exception) {
@@ -88,5 +91,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body("Invalid email or password");
+    }
+
+    @ExceptionHandler(TransactionNotFoundException.class)
+    public ResponseEntity<String> handleTransactionNotFound(
+            TransactionNotFoundException exception) {
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(exception.getMessage());
     }
 }
