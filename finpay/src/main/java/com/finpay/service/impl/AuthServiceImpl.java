@@ -64,8 +64,6 @@ public class AuthServiceImpl implements AuthService {
         user.setPassword(encodedPassword);
         User savedUser =
                 userRepository.save(user);
-
-        // 5. Convert Entity → Response DTO
         return userMapper.toResponse(savedUser);
     }
 }
