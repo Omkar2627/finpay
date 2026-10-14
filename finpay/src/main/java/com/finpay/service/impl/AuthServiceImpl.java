@@ -22,48 +22,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @AllArgsConstructor
 public class AuthServiceImpl implements AuthService {
-        private final AuthenticationManager authenticationManager;
-        private final JwtService jwtService;
-        private final UserRepository userRepository;
-        private final UserMapper userMapper;
-        private final PasswordEncoder passwordEncoder;
-
-//    @Override
-//    public LoginResponse login(LoginRequest request) {
-//
-//        System.out.println("Email: [" + request.getEmail() + "]");
-//        System.out.println("Password: [" + request.getPassword() + "]");
-//
-//        User user = userRepository.findByEmail(request.getEmail())
-//                .orElseThrow(() -> new RuntimeException("USER NOT FOUND"));
-//
-//        System.out.println("DB Email: [" + user.getEmail() + "]");
-//        System.out.println("DB Password Hash: " + user.getPassword());
-//
-//        System.out.println(
-//                "Password Match: " +
-//                        passwordEncoder.matches(
-//                                request.getPassword(),
-//                                user.getPassword()
-//                        )
-//        );
-//
-//        Authentication authentication =
-//                authenticationManager.authenticate(
-//                        new UsernamePasswordAuthenticationToken(
-//                                request.getEmail(),
-//                                request.getPassword()
-//                        )
-//                );
-//
-//        UserDetails userDetails =
-//                (UserDetails) authentication.getPrincipal();
-//
-//        String token = jwtService.generateToken(userDetails);
-//
-//        return new LoginResponse(token, "Bearer");
-//    }
-
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public LoginResponse login(LoginRequest request) {
@@ -101,10 +64,8 @@ public class AuthServiceImpl implements AuthService {
         user.setPassword(encodedPassword);
         User savedUser =
                 userRepository.save(user);
-
-        // 5. Convert Entity → Response DTO
         return userMapper.toResponse(savedUser);
     }
-    }
+}
 
 
