@@ -3,5 +3,7 @@ package com.finpay.entity;
 public enum TransactionType {
 
     DEPOSIT,
-    WITHDRAWAL
+    WITHDRAWAL,
+    TRANSFER_SENT,
+    TRANSFER_RECEIVED
 }
