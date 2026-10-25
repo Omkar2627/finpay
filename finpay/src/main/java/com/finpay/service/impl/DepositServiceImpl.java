@@ -10,11 +10,11 @@ import com.finpay.repository.TransactionRepository;
 import com.finpay.repository.UserRepository;
 import com.finpay.repository.WalletRepository;
 import com.finpay.service.DepositService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
