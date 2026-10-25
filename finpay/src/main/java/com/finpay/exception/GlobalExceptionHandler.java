@@ -119,4 +119,22 @@ public class GlobalExceptionHandler {
                 .badRequest()
                 .body(exception.getMessage());
     }
+
+    @ExceptionHandler(InsufficientBalanceException.class)
+    public ResponseEntity<String> handleInsufficientBalance(
+            InsufficientBalanceException exception) {
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(exception.getMessage());
+    }
+
+    @ExceptionHandler(IdempotencyKeyReuseException.class)
+    public ResponseEntity<String> handleIdempotencyKeyReuse(
+            IdempotencyKeyReuseException exception) {
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(exception.getMessage());
+    }
 }

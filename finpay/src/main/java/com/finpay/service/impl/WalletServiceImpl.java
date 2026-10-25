@@ -11,23 +11,23 @@ import com.finpay.mapper.WalletMapper;
 import com.finpay.repository.UserRepository;
 import com.finpay.repository.WalletRepository;
 import com.finpay.service.WalletService;
-import jakarta.transaction.Transactional;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
-public class WalletServiceImpl  implements WalletService {
+public class WalletServiceImpl implements WalletService {
 
     private final WalletRepository walletRepository;
     private final UserRepository userRepository;
     private final WalletMapper walletMapper;
 
-    public WalletServiceImpl ( WalletRepository walletRepository,UserRepository userRepository,WalletMapper walletMapper){
+    public WalletServiceImpl(WalletRepository walletRepository, UserRepository userRepository, WalletMapper walletMapper) {
         this.walletRepository = walletRepository;
         this.userRepository = userRepository;
         this.walletMapper = walletMapper;
