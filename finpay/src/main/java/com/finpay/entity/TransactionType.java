@@ -5,5 +5,6 @@ public enum TransactionType {
     DEPOSIT,
     WITHDRAWAL,
     TRANSFER_SENT,
-    TRANSFER_RECEIVED
+    TRANSFER_RECEIVED,
+    MERCHANT_PAYMENT
 }

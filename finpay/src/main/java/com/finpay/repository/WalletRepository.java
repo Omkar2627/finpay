@@ -38,4 +38,6 @@ public interface WalletRepository extends JpaRepository<Wallet, Long> {
     List<Wallet> findWalletsForUpdate(
             @Param("walletIds") Collection<Long> walletIds
     );
+
+    
 }

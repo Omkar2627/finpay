@@ -1,6 +1,5 @@
 package com.finpay.service.impl;
 
-import com.finpay.controller.UserController;
 import com.finpay.dto.request.DepositRequest;
 import com.finpay.dto.response.DepositResponse;
 import com.finpay.entity.*;
