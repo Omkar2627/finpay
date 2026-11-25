@@ -137,4 +137,30 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(exception.getMessage());
     }
+
+    @ExceptionHandler(MerchantAlreadyExistsException.class)
+    public ResponseEntity<String> handleMerchantAlreadyExists(
+            MerchantAlreadyExistsException exception) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(exception.getMessage());
+    }
+
+    @ExceptionHandler(MerchantNotFoundException.class)
+    public ResponseEntity<String> handleMerchantNotFound(
+            MerchantNotFoundException exception) {
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(exception.getMessage());
+    }
+
+    @ExceptionHandler(MerchantNotActiveException.class)
+    public ResponseEntity<String> handleMerchantNotActive(
+            MerchantNotActiveException exception) {
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(exception.getMessage());
+    }
 }
