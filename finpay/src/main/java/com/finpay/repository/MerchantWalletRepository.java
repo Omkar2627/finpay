@@ -1,5 +1,6 @@
 package com.finpay.repository;
 
+import com.finpay.entity.MerchantPayment;
 import com.finpay.entity.MerchantWallet;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,4 +26,15 @@ public interface MerchantWalletRepository
     Optional<MerchantWallet> findByMerchantIdForUpdate(
             @Param("merchantId") Long merchantId
     );
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("""
+            SELECT p
+            FROM MerchantPayment p
+            WHERE p.paymentReference = :paymentReference
+            """)
+    Optional<MerchantPayment> findByPaymentReferenceForUpdate(
+            @Param("paymentReference") String paymentReference
+    );
+
 }
