@@ -163,4 +163,31 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(exception.getMessage());
     }
+
+    @ExceptionHandler(RefundNotFoundException.class)
+    public ResponseEntity<String> handleRefundNotFound(
+            RefundNotFoundException exception) {
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(exception.getMessage());
+    }
+
+    @ExceptionHandler(RefundNotAllowedException.class)
+    public ResponseEntity<String> handleRefundNotAllowed(
+            RefundNotAllowedException exception) {
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(exception.getMessage());
+    }
+
+    @ExceptionHandler(RefundAmountExceededException.class)
+    public ResponseEntity<String> handleRefundAmountExceeded(
+            RefundAmountExceededException exception) {
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(exception.getMessage());
+    }
 }
